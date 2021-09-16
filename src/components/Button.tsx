@@ -1,8 +1,15 @@
 import React from 'react';
 
-import {Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  TouchableOpacityProps,
+} from 'react-native';
 
-export const Button = ({onPress}) => {
+type ButtonProps = TouchableOpacityProps;
+
+export const Button = ({onPress}: ButtonProps) => {
   return (
     <TouchableOpacity
       onPress={onPress}

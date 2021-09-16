@@ -3,13 +3,28 @@ import {View, Text, TextInput, StyleSheet, FlatList} from 'react-native';
 import {Button} from '../components/Button';
 import {SkillCard} from '../components/SkillCard';
 
+interface SkillData {
+  id: string;
+  name: string;
+  date?: Date;
+}
+
 export function Home() {
   const [newSkill, setNewSkill] = useState('');
-  const [allSkills, setAllSkills] = useState([]);
+  const [allSkills, setAllSkills] = useState<SkillData[]>([]);
   const [greetings, setGreeting] = useState('');
 
   function handleNewSkill() {
-    setAllSkills([...allSkills, newSkill]);
+    const data = {
+      id: String(new Date().getTime()),
+      name: newSkill,
+    };
+
+    setAllSkills(oldState => [...oldState, data]);
+  }
+
+  function handleRemoveSkill(id: string) {
+    setAllSkills(oldState => oldState.filter(skill => skill.id !== id));
   }
 
   useEffect(() => {
@@ -41,8 +56,13 @@ export function Home() {
       <FlatList
         showsVerticalScrollIndicator={false}
         data={allSkills}
-        keyExtractor={item => item}
-        renderItem={({item}) => <SkillCard skill={item} />}
+        keyExtractor={item => item.id}
+        renderItem={({item}) => (
+          <SkillCard
+            onPress={() => handleRemoveSkill(item.id)}
+            skill={item.name}
+          />
+        )}
       />
     </View>
   );
